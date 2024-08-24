@@ -1,0 +1,171 @@
+//
+// Theme style
+//
+
+// Initialize
+@import "init";
+
+// Components
+@import "./core/components/components";
+@import "components/components";
+
+// Layout
+@import "layout/layout";
+
+
+.dir{
+    direction: rtl; 
+}
+
+.font-c5x{
+    font-size: 36px;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+    .font-c4x{
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .logo-md{
+        position:'relative'; 
+        height: 75px;
+        width: 75px;
+     
+    
+    }
+}
+
+.font-c2x{
+   font-size : 24px ;
+}
+.font-cx{
+    font-size: 10px;
+}
+
+.football-container {
+    position: relative;
+    width: 100%;
+    height: 70vh; /* ارتفاع به اندازه صفحه نمایش */
+  }
+  
+  .football-field {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .team {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+  }
+  
+  .team-left {
+    left: 0;
+  }
+  
+  .team-right {
+    right: 0;
+  }
+
+ 
+  .player {
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+   
+  }
+.playerphoto{
+    width: 36px;
+    height: 36px;
+    background-color: red;
+    border-radius: 50%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.playername{
+  text-align: center;
+  font-size: medium;
+  
+}  
+
+ 
+@media (max-width: 750px) {
+  .football-container {
+    position: relative;
+    transform: rotate(90deg); /* چرخاندن کانتینر به اندازه 90 درجه */
+    transform-origin: center center; /* مرکز چرخش */
+    height: 100vw; /* استفاده از عرض صفحه به جای ارتفاع */
+   
+  }
+
+ 
+  .player {
+    transform: rotate(-90deg); 
+
+  }
+  .playerphoto{
+    width: 24px;
+    height: 24px;
+    background-color: red;
+    border-radius: 50%;
+    
+}
+.playername{
+  text-align: center;
+  font-size: small;
+  
+}  
+
+}
+@media (max-width: 400px) {
+  .playerphoto {
+    width: 18px;
+    height: 18px;
+  }
+
+  .playername {
+    font-size: x-small;
+  }
+
+  }
+
+
+  
+  @media (max-width: 992px) {
+    .justify{
+      justify-content: space-between;
+    }
+   
+  
+    }
+  
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh; /* ارتفاع صفحه */
+      width: 100%; /* عرض صفحه */
+    }
+    
+    .loading-logo {
+      width: 150px; /* عرض تصویر بارگذاری */
+      height: auto;
+    }
+    
+    .loading-text {
+      margin-top: 10px;
+      padding-left: 5px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    

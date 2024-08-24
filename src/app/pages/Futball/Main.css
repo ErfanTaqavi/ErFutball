@@ -1,0 +1,106 @@
+@font-face {
+  font-family: peyda-Black;
+  src: url(./assets/font/peyda/PeydaWeb-Black.woff2);
+}
+
+@font-face {
+  font-family: peyda-Bold;
+  src: url(./assets/font/peyda/PeydaWeb-Bold.woff2);
+}
+
+@font-face {
+  font-family: peyda-ExtraBold;
+  src: url(./assets/font/peyda/PeydaWeb-ExtraBold.woff2);
+}
+
+@font-face {
+  font-family: peyda-Medium;
+  src: url(./assets/font/peyda/PeydaWeb-Medium.woff2);
+}
+
+@font-face {
+  font-family: peyda-Regular;
+  src: url(./assets/font/peyda/PeydaWeb-Regular.woff2);
+}
+
+@font-face {
+  font-family: peyda-SemiBold;
+  src: url(./assets/font/peyda/PeydaWeb-SemiBold.woff2);
+}
+
+@font-face {
+  font-family: peyda-Thin;
+  src: url(./assets/font/peyda/PeydaWeb-Thin.woff2);
+}
+
+@font-face {
+  font-family: peyda-extralight;
+  src: url(./assets/font/peyda/peydaWeb-extralight.woff2);
+}
+
+@font-face {
+  font-family: peyda-light;
+  src: url(./assets/font/peyda/peydaWeb-light.woff2);
+}
+
+body {
+  font-family: peyda-Regular;
+}
+
+:root {
+  font-family: peyda-Regular;
+}
+
+
+.responsive-calendar {
+  /* by setting font-size, all the elements will correspond */
+  font-size: 12px !important;
+  /* default to 10px */
+  font-family: peyda-Regular;
+  text-align: center;
+  width: 100%;
+}
+
+.change-selected {
+  background-color: goldenrod !important;
+}
+
+.responsive-calendar {
+  /* by setting font-size, all the elements will correspond */
+  font-size: 9px !important;
+  /* default to 10px */
+  font-family: peyda-Regular;
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .custom-laptop-width {
+    width: 95% !important;
+    margin-left: 1.5rem !important;
+  }
+}
+
+@media (max-width: 1500px) {
+  .responsive-calendar {
+    font-size: 8px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .responsive-calendar {
+    font-size: 7px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-calendar {
+    font-size: 6px !important;
+  }
+}
+
+/* Large screens */
+@media (min-width: 2500px) {
+  .responsive-calendar {
+    font-size: 12px !important;
+  }
+}
