@@ -30,8 +30,8 @@ const AppRoutes: FC = () => {
         <Route element={<MasterLayout />}>
           <Route path="/" element={<MyPage />} />
           <Route path="/standing/:id" element={<StandingPage />} />
-          <Route path="/player" element={<Playerpage />} />
-          <Route path="/account/*" element={<AccountPage />} />
+          <Route path="/player/:id" element={<Playerpage />} />
+          <Route path="/account/:id" element={<AccountPage />} />
           <Route
             path="/profile/:id/*"
             element={

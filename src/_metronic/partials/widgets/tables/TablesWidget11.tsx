@@ -11,6 +11,8 @@ const TablesWidget11: React.FC<Props> = ({ className, data }) => {
 
   // تبدیل اعداد انگلیسی به فارسی
   const convertToPersianNumbers = (num: number | string) => {
+    if (num === null || num === undefined) return ''; // بررسی اینکه مقدار null یا undefined نباشد
+
     const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
     return num.toString().replace(/\d/g, (digit) => persianDigits[digit]);
   };
@@ -115,7 +117,7 @@ const TablesWidget11: React.FC<Props> = ({ className, data }) => {
                       {item?.fixture?.status?.short === 'NS' ? (
                         formatDateTime(item?.fixture?.date)
                       ) : (
-                        `${convertToPersianNumbers(item?.goals?.home)} : ${convertToPersianNumbers(item?.goals?.away)}`
+                        `${convertToPersianNumbers(item?.goals?.home || 0)} : ${convertToPersianNumbers(item?.goals?.away || 0)}`
                       )}
                     </span>
                   </td>

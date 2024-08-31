@@ -84,12 +84,16 @@
 .playerphoto{
     width: 36px;
     height: 36px;
-    background-color: red;
+    background-color:white;
     border-radius: 50%;
     
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.playernumber{
+  font-size: 12px;
+font-weight: bold;
 }
 .playername{
   text-align: center;
@@ -115,7 +119,6 @@
   .playerphoto{
     width: 24px;
     height: 24px;
-    background-color: red;
     border-radius: 50%;
     
 }
@@ -167,5 +170,13 @@
       padding-left: 5px;
       font-size: 20px;
       font-weight: bold;
+    }
+    .player-link {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .player-link:hover {
+      color: green;
     }
     

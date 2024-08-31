@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 type Props = {
   className: string;
@@ -6,23 +7,19 @@ type Props = {
 };
 
 const TablesWidget3: React.FC<Props> = ({ className, fixtureData }) => {
-  // بررسی وجود داده‌ها
   if (!fixtureData || !fixtureData.response || fixtureData.response.length === 0) {
     return <div>اطلاعات موجود نیست</div>;
   }
 
-  // استخراج داده‌ها از fixtureData
-  const fixture = fixtureData.response[0]?.fixture;
-  const league = fixtureData.response[0]?.league;
+  const fixture = fixtureData?.response[0]?.fixture;
+  const league = fixtureData?.response[0]?.league;
   const referee = fixture?.referee || "نامشخص";
   const venue = fixture?.venue || { name: "نامشخص", city: "نامشخص" };
 
-  // اطلاعات تورنمنت
-  const tournament = league ? `${league.name}, ${league.country}` : "نامشخص";
+  const tournament = league ? `${league.name}, ${league.country} ` : "نامشخص";
   const season = league?.season ? `${league.season}` : "نامشخص";
   const stage = league?.round ? league.round : "نامشخص";
   
-  // تاریخ و زمان شروع بازی
   const startDate = fixture ? new Date(fixture.date) : new Date();
   const formattedDate = startDate.toLocaleDateString("fa-IR");
   const startTime = `${startDate.getHours()}:${startDate.getMinutes()}`;
@@ -30,9 +27,9 @@ const TablesWidget3: React.FC<Props> = ({ className, fixtureData }) => {
   return (
     <div className={`card ${className} dir`}>
       {/* begin::Header */}
-      <div className="card-header border-0 pt-5">
-        <h3 className="card-title align-items-start flex-column">
-          <span className="card-label fw-bold fs-3 mb-1">اطلاعات مسابقه</span>
+      <div className='card-header border-0 pt-5 d-flex justify-content-center text-center'>
+        <h3 className='card-title align-items-center flex-column'>
+          <span className='card-label fw-bold fs-3 mb-1' >اطلاعات مسابقه</span>
         </h3>
       </div>
       {/* end::Header */}
@@ -54,45 +51,52 @@ const TablesWidget3: React.FC<Props> = ({ className, fixtureData }) => {
             <tbody>
               <tr>
                 <td>
-                  <a
-                    href="#"
-                    className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
+                  <span
+                   
+                    className="text-gray-900 fw-bold  mb-1 fs-6"
                   >
                     تورنمنت
-                  </a>
+                  </span>
                 </td>
-                <td className="text-start text-muted fw-semibold">{tournament}</td>
+                <td className="text-start   fw-semibold">
+                  <Link
+                  to={`/standing/${league.id}`}
+                  className="text-muted  text-hover-primary fw-bold"
+                  >
+                  <div className="symbol symbol-30px   symbol-fixed  ms-4"> <img src={`${league.logo}`}  alt="Leage Logo" /> </div> {tournament} 
+                  </Link>
+                  </td>
               </tr>
               <tr>
                 <td>
-                  <a
-                    href="#"
-                    className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
+                  <span
+                   
+                    className="text-gray-900 fw-bold text-gray-900 mb-1 fs-6"
                   >
                     فصل
-                  </a>
+                  </span>
                 </td>
                 <td className="text-start text-muted fw-semibold">{season}</td>
               </tr>
               <tr>
                 <td>
-                  <a
-                    href="#"
-                    className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
+                  <span
+                   
+                    className="text-gray-900 fw-bold text-gray-900 mb-1 fs-6"
                   >
                     گروه/مرحله
-                  </a>
+                  </span>
                 </td>
                 <td className="text-start text-muted fw-semibold">{stage}</td>
               </tr>
               <tr>
                 <td>
-                  <a
-                    href="#"
-                    className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
+                  <span
+                   
+                    className="text-gray-900 fw-bold text-gray-900 mb-1 fs-6"
                   >
                     شروع بازی
-                  </a>
+                  </span>
                 </td>
                 <td className="text-start text-muted fw-semibold">
                   {formattedDate} ساعت {startTime}
@@ -100,25 +104,25 @@ const TablesWidget3: React.FC<Props> = ({ className, fixtureData }) => {
               </tr>
               <tr>
                 <td>
-                  <a
-                    href="#"
-                    className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
+                  <span
+                   
+                    className="text-gray-900 fw-bold text-gray-900 mb-1 fs-6"
                   >
                     داور بازی
-                  </a>
+                  </span>
                 </td>
                 <td className="text-start text-muted fw-semibold">{referee}</td>
               </tr>
               <tr>
                 <td>
-                  <a
-                    href="#"
-                    className="text-gray-900 fw-bold text-hover-primary mb-1 fs-6"
+                  <span
+                   
+                    className="text-gray-900 fw-bold text-gray-900 mb-1 fs-6"
                   >
                     محل برگزاری بازی
-                  </a>
+                  </span>
                 </td>
-                <td className="text-start text-muted fw-semibold">{`${venue.city}, ${venue.name}`}</td>
+                <td className="text-start text-muted fw-semibold">{`${venue?.city}, ${venue?.name}`}</td>
               </tr>
             </tbody>
             {/* end::Table body */}

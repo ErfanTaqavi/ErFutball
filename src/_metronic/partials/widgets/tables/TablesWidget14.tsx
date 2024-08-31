@@ -1,20 +1,50 @@
-
 import React from 'react'
-import {KTIcon, toAbsoluteUrl} from '../../../helpers'
-import { Link } from 'react-router-dom'
+
 type Props = {
   className: string
+  fixtureData: any 
 }
 
-const TablesWidget14: React.FC<Props> = ({className}) => {
+const translateStatType = (type: string) => {
+  switch (type) {
+    case "Shots on Goal": return "شوت در چارچوب";
+    case "Shots off Goal": return "شوت خارج از چارچوب";
+    case "Total Shots": return "تعداد شوت";
+    case "Blocked Shots": return "شوت بلاک شده";
+    case "Shots insidebox": return "شوت داخل محوطه";
+    case "Shots outsidebox": return "شوت خارج محوطه";
+    case "Fouls": return "خطا";
+    case "Corner Kicks": return "کرنر";
+    case "Offsides": return "آفساید";
+    case "Ball Possession": return "مالکیت توپ";
+    case "Yellow Cards": return "کارت زرد";
+    case "Red Cards": return "کارت قرمز";
+    case "Goalkeeper Saves": return "مهار دروازه‌بان";
+    case "Total passes": return "تعداد پاس";
+    case "Passes accurate": return "پاس صحیح";
+    case "Passes %": return "درصد پاس صحیح";
+    case "expected_goals": return "گل‌های مورد انتظار";
+    case "goals_prevented": return "گل‌های جلوگیری شده";
+    default: return type;
+  }
+}
+
+const TablesWidget14: React.FC<Props> = ({ className, fixtureData }) => {
+  const team1 = fixtureData.response[0]?.statistics[0];
+  const team2 = fixtureData.response[0]?.statistics[1];
+
+  // بررسی اینکه آیا داده‌های آماری برای نمایش وجود دارد
+  if (!team1 || !team2 || team1.statistics.length === 0 || team2.statistics.length === 0) {
+    return null;
+  }
+
   return (
-    <div className={`card ${className} `}>
+    <div className={`card ${className}`}>
       {/* begin::Header */}
-      <div className='card-header border-0 pt-5  d-flex justify-content-end pe-2'>
-        <h3 className='card-title align-items-start flex-column justify-content-end '>
-          <span className='card-label fw-bold fs-3 mb-1'>آمار</span>
+      <div className='card-header border-0 pt-5 d-flex justify-content-center text-center'>
+        <h3 className='card-title card-label fw-bold fs-3 mb-1 align-items-center flex-column text-center '>
+          آمار
         </h3>
-       
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -25,346 +55,47 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
           <table className='table align-middle gs-0 gy-4'>
             {/* begin::Table head */}
             <thead>
-              <tr className='fw-bold  '>
-                <th className='ps-4 w-2/5 '>بارسلونا</th>
-                <th className='w-1/5 text-center	'>وضعیت بازی</th>
-                <th className='pe-4 w-2/5  d-flex justify-content-end '>رئال مادرید</th>
+              <tr className='fw-bold'>
+                <th className='ps-4 w-2/5'>{team1?.team?.name}</th>
+                <th className='w-1/5 text-center'>وضعیت بازی</th>
+                <th className='pe-4 w-2/5 d-flex justify-content-end'>{team2?.team?.name}</th>
               </tr>
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <tr >
-                <td  className='px-4  '>
-                  <span className='d-flex align-items-center hover:bg-sky-700'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-65                      </span>
-                     
-                    </div>
-                  </span>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  مالکیت ٪
+              {team1?.statistics?.map((stat: any, index: number) => {
+                const team2Stat = team2?.statistics?.find((s: any) => s.type === stat.type);
+                const statTypeInPersian = translateStatType(stat.type);
 
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-35                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-15                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  شوت                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-12                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-8                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  شوت در چارچوب
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-9                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-5                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  شوت خارج چارچوب
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-8                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-4                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  شوت بلاک شده
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-3                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-5                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  مهار دروازه بان
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-9                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-            
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-500                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  تعداد پاس
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-354                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-450                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  پاس صحیح
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-298                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-            
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-5                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  کرنر                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-7                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-6                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  خطا                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-3                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-              <tr>
-                <td className='px-4 '>
-                  <div className='d-flex align-items-center'>
-                  
-                    <div className='d-flex justify-content-start flex-column'>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7 '>
-2                      </span>
-                     
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <span  className='text-gray-900 text-center fw-bold text-hover-primary d-block mb-1 fs-6 px-1 '>
-                  کارت زرد
-                  </span>
-                </td>
-              
-                <td className='px-4 '>
-                  <div className='d-flex justify-content-end align-items-center  '>
-                    <div className='d-flex justify-content- flex-column '>
-                      <span  className='text-gray-900 fw-bold text-hover-primary mb-1 fs-7'>
-4                      </span>
-                    
-                    </div>
-                    
-                  </div>
-                </td>
-                
-              
-              </tr>
-            
+                return (
+                  <tr key={index}>
+                    <td className='px-4'>
+                      <div className='d-flex align-items-center'>
+                        <div className='d-flex justify-content-start flex-column'>
+                          <span className='text-gray-900 fw-bold  mb-1 fs-7'>
+                            {stat.value !== null ? stat.value : '0'}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className='text-gray-900 text-center fw-bold  d-block mb-1 fs-6 px-1 '>
+                        {statTypeInPersian}
+                      </span>
+                    </td>
+                    <td className='px-4'>
+                      <div className='d-flex justify-content-end align-items-center'>
+                        <div className='d-flex justify-content-end flex-column'>
+                          <span className='text-gray-900 fw-bold  mb-1 fs-7'>
+                            {team2Stat ? (team2Stat.value !== null ? team2Stat.value : '0') : '0'}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
             {/* end::Table body */}
           </table>
@@ -372,9 +103,9 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
         </div>
         {/* end::Table container */}
       </div>
-      {/* begin::Body */}
+      {/* end::Body */}
     </div>
   )
 }
 
-export {TablesWidget14}
+export { TablesWidget14 }

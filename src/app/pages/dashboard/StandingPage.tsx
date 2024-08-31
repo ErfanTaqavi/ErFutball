@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { TablesWidget9, TablesWidget11 } from "../../../_metronic/partials/widgets";
 
-// تابع برای دریافت داده‌های لیگ از API
 const fetchStandings = async (leagueId: number) => {
   const response = await fetch(`https://v3.football.api-sports.io/standings?league=${leagueId}&season=2024`, {
     method: 'GET',
@@ -20,7 +19,7 @@ const fetchStandings = async (leagueId: number) => {
   return response.json();
 };
 
-// تابع برای دریافت داده‌های بازی‌ها از API
+
 const fetchFixtures = async (from: string, to: string, leagueId: number) => {
   const response = await fetch(`https://v3.football.api-sports.io/fixtures/?from=${from}&to=${to}&season=2024&league=${leagueId}`, {
     method: 'GET',
@@ -44,9 +43,9 @@ const StandingPage = () => {
   // محاسبه تاریخ سه روز قبل و سه روز بعد از امروز
   const today = new Date();
   const fromDate = new Date(today);
-  fromDate.setDate(today.getDate() - 3); // سه روز قبل
+  fromDate.setDate(today.getDate() - 3); 
   const toDate = new Date(today);
-  toDate.setDate(today.getDate() + 3); // سه روز بعد
+  toDate.setDate(today.getDate() + 3); 
 
   const from = fromDate.toISOString().split('T')[0];
   const to = toDate.toISOString().split('T')[0];
@@ -58,8 +57,8 @@ const StandingPage = () => {
     {
       enabled: !isNaN(leagueId),
       keepPreviousData: true,
-      staleTime: 86400 * 1000, // داده‌ها تا یک روز تازه می‌مانند
-      refetchOnWindowFocus: false, // جلوگیری از واکشی مجدد هنگام فوکوس
+      staleTime: 86400 * 1000, 
+      refetchOnWindowFocus: false, 
     }
   );
 
@@ -70,23 +69,32 @@ const StandingPage = () => {
     {
       enabled: !isNaN(leagueId),
       keepPreviousData: true,
-      staleTime: 86400 * 1000, // داده‌ها تا یک روز تازه می‌مانند
-      refetchOnWindowFocus: false, // جلوگیری از واکشی مجدد هنگام فوکوس
+      staleTime: 86400 * 1000, 
+      refetchOnWindowFocus: false, 
     }
   );
 
-  if (standingsLoading || fixturesLoading) {
-    return <div>Loading...</div>;
+  if (fixturesLoading || standingsLoading) {
+    return (
+      <div className="loading-container">
+        <img src="/media/logos/img2.png" alt="logo" className="loading-logo" />
+        <p className="loading-text dir">در حال بارگزاری...</p>
+      </div>
+    );
   }
 
-  if (standingsError || fixturesError) {
-    return <div>Error fetching data</div>;
+  if (fixturesError || standingsError) {
+    return (
+      <div className="dir text-center">
+        خطایی در بارگزاری اطلاعات رخ داده است ...
+      </div>
+    );
   }
 
   // استخراج اطلاعات لیگ و استندینگ‌ها
   const leagueInfo = standingsData?.response?.[0]?.league || {};
   const standings = standingsData?.response?.[0]?.league.standings?.[0] || [];
-  const fixtures = fixturesData || [];  // استخراج داده‌های بازی‌ها
+  const fixtures = fixturesData || [];  
 
   return (
     <>
@@ -126,3 +134,68 @@ const StandingPage = () => {
 };
 
 export default StandingPage;
+
+
+// const fetchStandings = async (leagueId: number) => {
+//   // دریافت داده‌ها از API ایستاده‌ها
+//   const standingsResponse = await fetch(`https://v3.football.api-sports.io/standings?league=${leagueId}&season=2024`, {
+//     method: 'GET',
+//     headers: {
+//       'x-rapidapi-host': 'v3.football.api-sports.io',
+//       'x-rapidapi-key': '8c62bbad82bf14e61d07baaa6574b378'
+//     }
+//   });
+
+//   if (!standingsResponse.ok) {
+//     throw new Error('Network response was not ok for standings');
+//   }
+
+//   const standingsData = await standingsResponse.json();
+//   // ارسال داده‌ها به API ترجمه
+//   const translationResponse = await fetch('https://mrelahi.ir/api/v1/new-translate/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(standingsData)
+//   });
+
+//   if (!translationResponse.ok) {
+//     throw new Error('Failed to translate response');
+//   }
+ 
+
+//   return translationResponse.json();
+// };
+
+
+// const fetchFixtures = async (from: string, to: string, leagueId: number) => {
+//   const response = await fetch(`https://v3.football.api-sports.io/fixtures/?from=${from}&to=${to}&season=2024&league=${leagueId}`, {
+//     method: 'GET',
+//     headers: {
+//       'x-rapidapi-host': 'v3.football.api-sports.io',
+//       'x-rapidapi-key': '8c62bbad82bf14e61d07baaa6574b378'
+//     }
+//   });
+
+//   if (!response.ok) {
+//     throw new Error('Network response was not ok');
+//   }
+
+//   const leagueData = await response.json();
+//   // ارسال داده‌ها به API ترجمه
+//   const translationResponse = await fetch('https://mrelahi.ir/api/v1/new-translate/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify(leagueData)
+//   });
+
+//   if (!translationResponse.ok) {
+//     throw new Error('Failed to translate response');
+//   }
+ 
+
+//   return translationResponse.json();
+// };

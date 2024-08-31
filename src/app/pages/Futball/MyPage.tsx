@@ -44,8 +44,8 @@ const fetchFixtures = async (date) => {
 };
 
 const MyPage = () => {
-  const gregorianToday = utils('en').getToday(); // { year: 2024, month: 8, day: 17 }
-  const persianToday = utils('fa').getToday(); // { year: 1403, month: 5, day: 27 }
+  const gregorianToday = utils('en').getToday(); 
+  const persianToday = utils('fa').getToday(); 
 
   const [selectedDay, setSelectedDay] = useState(persianToday);
   const [gregorianDate, setGregorianDate] = useState(gregorianToday);
@@ -61,9 +61,9 @@ const MyPage = () => {
 
   const query = useQuery(['fixturesData', gregorianDate], () => fetchFixtures(gregorianDate), {
     keepPreviousData: true,
-    refetchOnWindowFocus: false,  // غیرفعال کردن ریفچ خودکار هنگام فوکوس مجدد بر روی پنجره
-    refetchInterval: false,       // غیرفعال کردن ریفچ خودکار بر اساس زمان
-    staleTime: 3600000,           // تنظیم زمان انقضای کش به یک ساعت (3600000 میلی‌ثانیه)
+    refetchOnWindowFocus: false,  
+    refetchInterval: false,       
+    staleTime: 3600000,           
   });
 
   const { data, error, isLoading } = query;

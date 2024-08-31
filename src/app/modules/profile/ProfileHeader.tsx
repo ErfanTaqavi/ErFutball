@@ -1,8 +1,5 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import ball from "../../../../public/media/logos/ball.svg";
-import redcard from "../../../../public/media/logos/redcard.png";
-import yellowcard from "../../../../public/media/logos/yellowcard.png";
 import { Link } from "react-router-dom";
 
 // تبدیل اعداد انگلیسی به فارسی
@@ -25,59 +22,67 @@ const formatDateTime = (dateTime: string) => {
   return new Intl.DateTimeFormat("fa-IR", options).format(date);
 };
 
-// تابع برای محاسبه زمان باقی‌مانده به صورت فارسی
-const formatTimeRemaining = (startTime: string) => {
-  const currentTime = new Date().getTime();
-  const gameTime = new Date(startTime).getTime();
-  const timeDiff = gameTime - currentTime;
-
-  if (timeDiff <= 0) {
-    return "در حال شروع";
-  }
-
-  const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-  const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-  return `${convertToPersianNumbers(hours)} ساعت و ${convertToPersianNumbers(
-    minutes
-  )} دقیقه`;
-};
-
 interface ProfileHeaderProps {
   fixtureData?: any;
-  lineupsData?: any;
 }
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData }) => {
   const location = useLocation();
   const fixtureId = fixtureData?.response[0]?.fixture?.id;
 
-  if (!fixtureData || !fixtureData.response || fixtureData.response.length === 0) {
+  if (
+    !fixtureData ||
+    !fixtureData.response ||
+    fixtureData.response.length === 0
+  ) {
     return <div>No data available</div>;
   }
-
+  const lineups = fixtureData.response[0].lineups;
   const fixture = fixtureData.response[0].fixture;
   const homeTeam = fixtureData.response[0].teams.home;
   const awayTeam = fixtureData.response[0].teams.away;
+  const goals = fixtureData.response[0].goals;
 
-  const homeLineup = lineupsData?.response.find(
-    (lineup: any) => lineup.team.id === homeTeam.id
-  );
-  const awayLineup = lineupsData?.response.find(
-    (lineup: any) => lineup.team.id === awayTeam.id
-  );
+  const homeCoach = lineups[0]?.coach?.name || "نامعلوم";
+  const awayCoach = lineups[1]?.coach?.name || "نامعلوم";
+  const homeFormation = lineups[0]?.formation || "نامعلوم";
+  const awayFormation = lineups[1]?.formation || "نامعلوم";
 
-  const homeCoach = homeLineup?.coach?.name || "نامعلوم";
-  const awayCoach = awayLineup?.coach?.name || "نامعلوم";
-  const homeFormation = homeLineup?.formation || "نامعلوم";
-  const awayFormation = awayLineup?.formation || "نامعلوم";
+  const homeScore = goals?.home || 0;
+  const awayScore = goals?.away || 0;
 
-  const homeScore = fixture.score?.fulltime?.home || 0;
-  const awayScore = fixture.score?.fulltime?.away || 0;
   const matchDate = new Date(fixture.date);
   const matchDateString = formatDateTime(fixture.date);
-  const isMatchPlayed = fixture.status?.short !== "NS";
-  const timeRemaining = formatTimeRemaining(fixture.date);
+
+  const isMatchFinished = fixture.status?.short === "FT";
+
+  const getScoreDisplay = () => {
+    if (isMatchFinished) {
+      return (
+        <>
+          <div className="py-3 px-4 align-content-center">
+            <div className="d-flex align-content-center justify-content-center">
+              <div className="fs-lg-2 fw-bolder fs-5">{homeScore}</div>
+            </div>
+          </div>
+          <div className="py-3 px-4 fw-bolder fs-5 fs-lg-2">
+            <span>:</span>
+          </div>
+          <div className="py-3 px-4 align-content-center">
+            <div className="d-flex align-content-center justify-content-center">
+              <div className="fs-lg-2 fw-bolder fs-5">{awayScore}</div>
+            </div>
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <div className="fs-lg-2 fw-bolder fs-5 text-center">
+          {matchDateString}
+        </div>
+      );
+    }
+  };
 
   return (
     <>
@@ -86,7 +91,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData 
           <div className="d-flex flex-wrap flex-sm-nowrap mb-3 justify-content-around">
             <div>
               <div className="mb-4 d-flex justify-content-center align-items-center">
-                <div className="symbol symbol-50px symbol-lg-100px symbol-fixed">
+                <div className="symbol symbol-50px symbol-lg-100px symbol-fixed ">
                   <img
                     src={homeTeam.logo || "/media/avatars/300-23.jpg"}
                     alt={homeTeam.name}
@@ -96,12 +101,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData 
               <div className="d-flex align-items-center flex-wrap mb-2">
                 <div className="d-flex flex-column">
                   <div className="d-flex flex-column align-items-center mb-2 justify-content-center">
-                    <a
-                      href="#"
+                    <Link
+                      to={`/account/${homeTeam.id}`}
+                      // state={{ fixture: fixture}}
                       className="text-gray-900 text-hover-primary fs-lg-2 fw-bolder me-1 fs-7"
                     >
                       {homeTeam.name}
-                    </a>
+                    </Link>
                     <div>
                       <p className="text-gray-500 mb-0">میزبان</p>
                     </div>
@@ -143,41 +149,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData 
               <div className="d-flex flex-wrap flex-stack">
                 <div className="d-flex flex-column flex-grow-1">
                   <div className="d-flex flex-wrap justify-content-center">
-                    {isMatchPlayed ? (
-                      <>
-                        <div className="py-3 px-4 align-content-center">
-                          <div className="d-flex align-content-center justify-content-center">
-                            <div className="fs-lg-2 fw-bolder fs-5">
-                              {awayScore}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="py-3 px-4 fw-bolder fs-5 fs-lg-2">
-                          <span>:</span>
-                        </div>
-                        <div className="py-3 px-4 align-content-center">
-                          <div className="d-flex align-content-center justify-content-center">
-                            <div className="fs-lg-2 fw-bolder fs-5">
-                              {homeScore}
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="d-flex flex-column align-content-center justify-content-center">
-                        <div className="fs-lg-2 fw-bolder fs-5 text-center">
-                          {matchDateString}
-                        </div>
-                        <div className="fs-lg-2 fw-bolder fs-5">
-                          {/* نمایش پیام در صورت عدم وجود اطلاعات لاین آپ */}
-                          {!homeLineup && !awayLineup && !isMatchPlayed && (
-                            <div className="text-center text-danger mt-4">
-                              هنوز اطلاعات بازی در دسترس نیست
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                    {getScoreDisplay()}
                   </div>
                 </div>
               </div>
@@ -185,7 +157,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData 
 
             <div>
               <div>
-                <div className="mb-4">
+                <div className="mb-4 d-flex justify-content-center align-items-center">
                   <div className="symbol symbol-50px symbol-lg-100px symbol-fixed">
                     <img
                       src={awayTeam.logo || "/media/avatars/300-23.jpg"}
@@ -195,12 +167,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData 
                 </div>
                 <div className="d-flex flex-column">
                   <div className="d-flex flex-column align-items-center mb-2 justify-content-center">
-                    <a
-                      href="#"
+                    <Link
+                      to={`/account/${awayTeam.id}`}
                       className="text-gray-900 text-hover-primary fs-lg-2 fw-bolder me-1 fs-7"
                     >
                       {awayTeam.name}
-                    </a>
+                    </Link>
                     <div>
                       <p className="text-gray-500 mb-0">میهمان</p>
                     </div>
@@ -212,7 +184,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ fixtureData, lineupsData 
                         سرمربی:
                       </span>
                       <span
-                        className="fs-7 fs-lg-5"
+                        className="fs-7 fs-lg-5 text-wrap "
                         style={{ fontFamily: "peyda-medium" }}
                       >
                         {awayCoach}
