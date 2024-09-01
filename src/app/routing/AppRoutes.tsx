@@ -1,6 +1,6 @@
 import { FC, Suspense } from 'react'
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
-import { App } from '../App'
+
 import MyPage from '../pages/Futball/MyPage'
 import StandingPage  from '../pages/dashboard/StandingPage'
 import Playerpage from '../pages/Futball/player'

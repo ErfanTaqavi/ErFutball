@@ -56,9 +56,9 @@ const TablesWidget14: React.FC<Props> = ({ className, fixtureData }) => {
             {/* begin::Table head */}
             <thead>
               <tr className='fw-bold'>
-                <th className='ps-4 w-2/5'>{team1?.team?.name}</th>
-                <th className='w-1/5 text-center'>وضعیت بازی</th>
-                <th className='pe-4 w-2/5 d-flex justify-content-end'>{team2?.team?.name}</th>
+                <th className='w-25 text-start text-nowrap'>{team1?.team?.name}</th>
+                <th className='w-50 text-center'>وضعیت بازی</th>
+                <th className='w-25 text-end text-nowrap'>{team2?.team?.name}</th>
               </tr>
             </thead>
             {/* end::Table head */}
@@ -70,28 +70,20 @@ const TablesWidget14: React.FC<Props> = ({ className, fixtureData }) => {
 
                 return (
                   <tr key={index}>
-                    <td className='px-4'>
-                      <div className='d-flex align-items-center'>
-                        <div className='d-flex justify-content-start flex-column'>
-                          <span className='text-gray-900 fw-bold  mb-1 fs-7'>
-                            {stat.value !== null ? stat.value : '0'}
-                          </span>
-                        </div>
-                      </div>
+                    <td className='px-4 text-start'>
+                      <span className='text-gray-900 fw-bold mb-1 fs-7'>
+                        {stat.value !== null ? stat.value : '0'}
+                      </span>
                     </td>
-                    <td>
-                      <span className='text-gray-900 text-center fw-bold  d-block mb-1 fs-6 px-1 '>
+                    <td className='text-center'>
+                      <span className='text-gray-900 fw-bold d-block mb-1 fs-6'>
                         {statTypeInPersian}
                       </span>
                     </td>
-                    <td className='px-4'>
-                      <div className='d-flex justify-content-end align-items-center'>
-                        <div className='d-flex justify-content-end flex-column'>
-                          <span className='text-gray-900 fw-bold  mb-1 fs-7'>
-                            {team2Stat ? (team2Stat.value !== null ? team2Stat.value : '0') : '0'}
-                          </span>
-                        </div>
-                      </div>
+                    <td className='px-4 text-end'>
+                      <span className='text-gray-900 fw-bold mb-1 fs-7'>
+                        {team2Stat ? (team2Stat.value !== null ? team2Stat.value : '0') : '0'}
+                      </span>
                     </td>
                   </tr>
                 );

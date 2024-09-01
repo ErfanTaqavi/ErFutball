@@ -1,5 +1,4 @@
 import React from "react";
-import { toAbsoluteUrl } from "../../../helpers";
 import shirt from "../../../../../public/media/logos/t-shirt.svg";
 import profile from "../../../../../public/media/logos/profile.svg";
 import { Link } from "react-router-dom";
@@ -10,6 +9,7 @@ type Player = {
   age: number;
   number: number | null;
   position: string;
+  photo?: string;
 };
 
 type ListsWidget2Props = {

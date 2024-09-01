@@ -1,12 +1,61 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import FieldImage from './../../../../../public/media/logos/lineup.png';
 import goalIcon from "../../../../../public/media/logos/ball.svg"; 
 import yellowCardIcon from "../../../../../public/media/logos/yellowcard.png"; 
 import redCardIcon from "../../../../../public/media/logos/redcard.png";
-import { Link } from 'react-router-dom';
 
-// کامپوننت Player که شماره و نام بازیکن را نمایش می‌دهد
-const Player = ({ style, number, name, id }) => {
+// تعریف تایپ‌ها
+interface PlayerData {
+  player: {
+    id: number;
+    name: string;
+    number: string;
+  };
+}
+
+interface EventData {
+  type: 'Goal' | 'Card';
+  detail?: 'Yellow Card' | 'Red Card';
+  time: {
+    elapsed: number;
+  };
+  team: {
+    id: number;
+  };
+  player: {
+    id: number;
+    name: string;
+  };
+}
+
+interface TeamData {
+  team: {
+    name: string;
+    id: number;
+  };
+  startXI: PlayerData[];
+  substitutes: PlayerData[];
+}
+
+interface FixtureData {
+  response: [
+    {
+      lineups: [TeamData, TeamData];
+      events: EventData[];
+    }
+  ];
+}
+
+// کامپوننت Player
+interface PlayerProps {
+  style?: React.CSSProperties;
+  number: string;
+  name: string;
+  id: number;
+}
+
+const Player: React.FC<PlayerProps> = ({ style, number, name, id }) => {
   return (
     <div className="player" style={style}>
       <div className='playerphoto'>
@@ -19,19 +68,24 @@ const Player = ({ style, number, name, id }) => {
   );
 };
 
-// کامپوننت Team که موقعیت بازیکنان را تنظیم می‌کند
-const Team = ({ side, players, name }) => {
-  // موقعیت‌های از پیش تعیین‌شده برای بازیکنان
+// کامپوننت Team
+interface TeamProps {
+  side: 'left' | 'right';
+  players: PlayerData[];
+  name?: string;
+}
+
+const Team: React.FC<TeamProps> = ({ side, players}) => {
   const positions = [
     { top: '45%', left: side === 'left' ? '0%' : 'unset', right: side === 'right' ? '0%' : 'unset' }, // دروازه‌بان
     { top: '35%', left: side === 'left' ? '30%' : 'unset', right: side === 'right' ? '30%' : 'unset' }, // دفاع وسط
-    { top: '55%', left: side === 'left' ? '30%' : 'unset', right: side === 'right' ? '30%' : 'unset' },// دفاع وسط
+    { top: '55%', left: side === 'left' ? '30%' : 'unset', right: side === 'right' ? '30%' : 'unset' }, // دفاع وسط
     { top: '15%', left: side === 'left' ? '35%' : 'unset', right: side === 'right' ? '35%' : 'unset' }, // دفاع بالا
-    { top: '75%', left: side === 'left' ? '35%' : 'unset', right: side === 'right' ? '35%' : 'unset' },// دفاع پایین
+    { top: '75%', left: side === 'left' ? '35%' : 'unset', right: side === 'right' ? '35%' : 'unset' }, // دفاع پایین
     { top: '25%', left: side === 'left' ? '50%' : 'unset', right: side === 'right' ? '50%' : 'unset' }, // هافبک‌های وسط
     { top: '45%', left: side === 'left' ? '50%' : 'unset', right: side === 'right' ? '50%' : 'unset' },
     { top: '65%', left: side === 'left' ? '50%' : 'unset', right: side === 'right' ? '50%' : 'unset' },
-    { top: '15%', left: side === 'left' ? '70%' : 'unset', right: side === 'right' ? '70%' : 'unset' },// مهاجمان
+    { top: '15%', left: side === 'left' ? '70%' : 'unset', right: side === 'right' ? '70%' : 'unset' }, // مهاجمان
     { top: '75%', left: side === 'left' ? '70%' : 'unset', right: side === 'right' ? '70%' : 'unset' },
     { top: '45%', left: side === 'left' ? '72%' : 'unset', right: side === 'right' ? '75%' : 'unset' },
   ];
@@ -44,7 +98,7 @@ const Team = ({ side, players, name }) => {
 
         return (
           <Player
-            key={player.player.id}
+            key={id}
             number={number}
             name={name}
             style={style}
@@ -57,7 +111,11 @@ const Team = ({ side, players, name }) => {
 };
 
 // کامپوننت اصلی Projects
-export function Projects({ fixtureData }) {
+interface ProjectsProps {
+  fixtureData: FixtureData;
+}
+
+export const Projects: React.FC<ProjectsProps> = ({ fixtureData }) => {
   const teamLeft = fixtureData?.response[0]?.lineups[0];
   const teamRight = fixtureData?.response[0]?.lineups[1];
 
@@ -67,13 +125,13 @@ export function Projects({ fixtureData }) {
 
   // فیلتر کردن رویدادها برای هر تیم
   const eventsLeft = fixtureData?.response[0]?.events?.filter(event =>
-    (event.type === 'Goal' || event?.type === 'Card') && event?.team?.id === teamLeft?.team?.id
+    (event.type === 'Goal' || event.type === 'Card') && event.team.id === teamLeft.team.id
   );
   const eventsRight = fixtureData?.response[0]?.events?.filter(event =>
-    (event?.type === 'Goal' || event?.type === 'Card') && event?.team?.id === teamRight?.team?.id
+    (event.type === 'Goal' || event.type === 'Card') && event.team.id === teamRight.team.id
   );
 
-  const getEventIcon = (eventType, detail) => {
+  const getEventIcon = (eventType: string, detail?: string) => {
     if (eventType === 'Goal') return goalIcon;
     if (eventType === 'Card') {
       if (detail === 'Yellow Card') return yellowCardIcon;
@@ -86,25 +144,25 @@ export function Projects({ fixtureData }) {
     <div>
       <div className="football-container">
         <img src={FieldImage} alt="Football Field" className="football-field" />
-        <Team side="left" players={teamLeft?.startXI} name={teamLeft?.team?.name} />
-        <Team side="right" players={teamRight?.startXI} name={teamRight?.team?.name} />
+        <Team side="left" players={teamLeft.startXI} name={teamLeft.team.name} />
+        <Team side="right" players={teamRight.startXI} name={teamRight.team.name} />
       </div>
       <div className='container w-full fs-md-6'>
         <div className='row dir align-items-center gap-5 gap-md-0'>
           <div className='col-md-6 col-12 text-center'>
-            <h3 className='pt-2'>{teamRight?.team?.name}</h3>
+            <h3 className='pt-2'>{teamRight.team.name}</h3>
             <div className='d-flex flex-row justify-content-around'>
               {eventsRight?.length > 0 ? (
                 <div>
                   <h6>رویدادها</h6>
                   <table>
                     <tbody>
-                      {eventsRight?.map((event, index) => (
+                      {eventsRight.map((event, index) => (
                         <tr key={index}>
-                          <td><img src={getEventIcon(event?.type, event?.detail)} alt={event?.type} style={{ width: '20px' }} /></td>
-                          <td>{event?.time?.elapsed}'</td>
-                          <td><Link to={`/player/${event?.player?.id}`} className="text-hover-primary text-gray-900">
-                            {event?.player?.name}
+                          <td><img src={getEventIcon(event.type, event.detail)} alt={event.type} style={{ width: '20px' }} /></td>
+                          <td>{event.time.elapsed}'</td>
+                          <td><Link to={`/player/${event.player.id}`} className="text-hover-primary text-gray-900">
+                            {event.player.name}
                           </Link></td>
                         </tr>
                       ))}
@@ -114,16 +172,16 @@ export function Projects({ fixtureData }) {
               ) : (
                 <div>چیزی برای نمایش وجود ندارد</div>
               )}
-              {teamRight?.substitutes?.length > 0 ? (
+              {teamRight.substitutes.length > 0 ? (
                 <div>
                   <table>
                     <tbody>
                       <tr><th colSpan="2">تعویضی‌ها</th></tr>
-                      {teamRight?.substitutes?.map(player => (
-                        <tr key={player?.player?.id}>
-                          <td>{player?.player?.number}</td>
-                          <td><Link to={`/player/${player?.player?.id}`} className="text-hover-primary text-gray-900">
-                            {player?.player?.name}
+                      {teamRight.substitutes.map(player => (
+                        <tr key={player.player.id}>
+                          <td>{player.player.number}</td>
+                          <td><Link to={`/player/${player.player.id}`} className="text-hover-primary text-gray-900">
+                            {player.player.name}
                           </Link></td>
                         </tr>
                       ))}
@@ -136,19 +194,19 @@ export function Projects({ fixtureData }) {
             </div>
           </div>
           <div className='col-md-6 col-12 text-center'>
-            <h3>{teamLeft?.team?.name}</h3>
+            <h3>{teamLeft.team.name}</h3>
             <div className='d-flex flex-row justify-content-around'>
               {eventsLeft?.length > 0 ? (
                 <div>
                   <h6>رویدادها</h6>
                   <table>
                     <tbody>
-                      {eventsLeft?.map((event, index) => (
+                      {eventsLeft.map((event, index) => (
                         <tr key={index}>
-                          <td><img src={getEventIcon(event?.type, event?.detail)} alt={event?.type} style={{ width: '20px' }} /></td>
+                          <td><img src={getEventIcon(event.type, event.detail)} alt={event.type} style={{ width: '20px' }} /></td>
                           <td>{event.time.elapsed}'</td>
-                          <td><Link to={`/player/${event?.player?.id}`} className="text-hover-primary text-gray-900">
-                            {event?.player?.name}
+                          <td><Link to={`/player/${event.player.id}`} className="text-hover-primary text-gray-900">
+                            {event.player.name}
                           </Link></td>
                         </tr>
                       ))}
@@ -158,16 +216,16 @@ export function Projects({ fixtureData }) {
               ) : (
                 <div>چیزی برای نمایش وجود ندارد</div>
               )}
-              {teamLeft?.substitutes?.length > 0 ? (
+              {teamLeft.substitutes.length > 0 ? (
                 <div>
                   <table>
                     <tbody>
                       <tr><th colSpan="2">تعویضی‌ها</th></tr>
-                      {teamLeft?.substitutes?.map(player => (
-                        <tr key={player?.player?.id}>
-                          <td>{player?.player?.number}</td>
-                          <td><Link to={`/player/${player?.player?.id}`} className="text-hover-primary text-gray-900">
-                            {player?.player?.name}
+                      {teamLeft.substitutes.map(player => (
+                        <tr key={player.player.id}>
+                          <td>{player.player.number}</td>
+                          <td><Link to={`/player/${player.player.id}`} className="text-hover-primary text-gray-900">
+                            {player.player.name}
                           </Link></td>
                         </tr>
                       ))}

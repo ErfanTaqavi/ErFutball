@@ -137,7 +137,7 @@ export default StandingPage;
 
 
 // const fetchStandings = async (leagueId: number) => {
-//   // دریافت داده‌ها از API ایستاده‌ها
+
 //   const standingsResponse = await fetch(`https://v3.football.api-sports.io/standings?league=${leagueId}&season=2024`, {
 //     method: 'GET',
 //     headers: {
@@ -152,7 +152,7 @@ export default StandingPage;
 
 //   const standingsData = await standingsResponse.json();
 //   // ارسال داده‌ها به API ترجمه
-//   const translationResponse = await fetch('https://mrelahi.ir/api/v1/new-translate/', {
+//   const translationResponse = await fetch('https://movie.rashx.ir/api/v1/new-translate/', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json'
@@ -184,7 +184,7 @@ export default StandingPage;
 
 //   const leagueData = await response.json();
 //   // ارسال داده‌ها به API ترجمه
-//   const translationResponse = await fetch('https://mrelahi.ir/api/v1/new-translate/', {
+//   const translationResponse = await fetch('https://movie.rashx.ir/api/v1/new-translate/', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json'

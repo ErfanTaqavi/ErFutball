@@ -52,6 +52,7 @@ type Props = {
   data: Team[];
   leagueName: string;
   leagueLogo: string;
+  leagueCountry: string;
 };
 
 const TablesWidget9: React.FC<Props> = ({

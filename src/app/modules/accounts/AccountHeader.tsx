@@ -1,12 +1,10 @@
 import React from 'react';
-import { toAbsoluteUrl } from '../../../_metronic/helpers';
 
 type AccountHeaderProps = {
   teamName: string;
   teamLogo: string | null;  
   foundingYear: number;
   country: string;
-  coach: string;
   stadium: string;
   city: string;
   stadiumCapacity: number;

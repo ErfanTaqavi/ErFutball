@@ -1,13 +1,9 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { AsideDefault } from './components/aside/LeaguesShow'
 import { Footer } from './components/Footer'
 import { HeaderWrapper } from './components/header/HeaderWrapper'
-import { RightToolbar } from '../partials/layout/RightToolbar'
-import { ScrollTop } from './components/ScrollTop'
 import { Content } from './components/Content'
 import { PageDataProvider } from './core'
-import { ActivityDrawer, DrawerMessenger, InviteUsers, UpgradePlan } from '../partials'
 import { MenuComponent } from '../assets/ts/components'
 import '../../app/pages/Futball/Main.css';
 const MasterLayout = () => {
